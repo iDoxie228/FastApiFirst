@@ -1,0 +1,15 @@
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from config import settings
+
+
+DSN = (
+    f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@"
+    f"{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+)
+engine = create_async_engine(DSN)
+
+Session = async_sessionmaker(
+    engine, 
+    class_=AsyncSession, 
+    expire_on_commit=False,
+)

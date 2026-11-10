@@ -1,0 +1,8 @@
+sqlalchemy[asyncio]
+fastapi
+asyncpg
+aiohttp
+uvicorn
+pydantic
+python-dotenv
+pydantic-settings
