@@ -1,8 +1,7 @@
 from typing import Annotated
-
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, status
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from datetime import datetime
 import schemas
 from dependencies import create_session
 from lifespan import lifespan
@@ -24,7 +23,11 @@ app = FastAPI(
 
 SessionDep = Annotated[AsyncSession, Depends(create_session)]
 
-@app.post("/advertisement", response_model=schemas.AdResponse)
+@app.post(
+        "/advertisement",
+        response_model=schemas.AdResponse,
+        status_code=status.HTTP_201_CREATED
+)
 async def create_ad(session: SessionDep, data: schemas.CreateAdRequest):
     return await create_advertisement(session, data)
 
@@ -33,13 +36,17 @@ async def create_ad(session: SessionDep, data: schemas.CreateAdRequest):
 async def read_all_ads(
     session: SessionDep,
     title: str | None=None,
+    description: str | None=None,
     author: str | None=None,
     price_min: float | None=None,
     price_max: float | None=None,
+    created_at_after: datetime | None = None,
 ):
-    if title or author or price_min is not None or price_max is not None:
+    if title or description or author or price_min is not None \
+        or price_max is not None or created_at_after is not None:
         return await get_advertisements_query_params(
-            session, title, author, price_min, price_max
+            session, title, description, author,
+            price_min, price_max, created_at_after
         )
     return await get_all_advertisements(session)
 

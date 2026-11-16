@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Float, Date, Text
+from sqlalchemy import Column, String, Integer, Float, Datetime, Text
 from sqlalchemy.orm import DeclarativeBase
 from datetime import datetime
 
@@ -13,4 +13,4 @@ class Advertisement(Base):
     description = Column(Text, nullable=False)
     price = Column(Float, nullable=False)
     author = Column(String(200), nullable=False)
-    created_at = Column(Date, default=datetime.now, nullable=False)
+    created_at = Column(Datetime, default=datetime.now, nullable=False)
